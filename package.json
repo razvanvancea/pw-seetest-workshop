@@ -1,0 +1,42 @@
+{
+  "name": "pw-ai-workshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:api": "npx playwright test --config=api-playwright.config.ts",
+    "test:check": "npx playwright test tests/e2e/setup-check.spec.ts",
+    "test:fundamentals": "playwright test tests/01-playwright-fundamentals.spec.ts",
+    "test:codegen": "playwright test tests/02-account-creation-codegen.spec.ts",
+    "test:optional": "playwright test tests/03-optional-fundamentals.spec.ts",
+    "test:headless": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:single-worker": "npx playwright test --workers=1",
+    "test:debug": "npx playwright test --headed --debug",
+    "show:report": "npx playwright show-report",
+    "test:ui": "npx playwright test --ui",
+    "test:smoke": "npx playwright test -g '@smoke'",
+    "test:ten:times": "npx playwright test -g '@wip' --repeat-each=10",
+    "format": "npx oxfmt",
+    "format:check": "npx oxfmt --check",
+    "lint": "tsc --noEmit && eslint tests/**",
+    "codegen": "npx playwright codegen https://practicesoftwaretesting.com",
+    "test:dev:env": "npx cross-env URL=https://somedevelopmentenv.com playwright test"
+  },
+  "keywords": [],
+  "author": "RV",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^25.3.3",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.2",
+    "oxfmt": "^0.51.0",
+    "playwright-schema-validator": "^1.0.0",
+    "typescript-eslint": "^8.54.0",
+    "zod": "^4.4.3"
+  }
+}
