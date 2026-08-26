@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:api": "npx playwright test --config=api-playwright.config.ts",
     "test:check": "npx playwright test tests/e2e/setup-check.spec.ts",
     "test:fundamentals": "playwright test tests/01-playwright-fundamentals.spec.ts",
     "test:codegen": "playwright test tests/02-account-creation-codegen.spec.ts",
@@ -25,7 +24,7 @@
     "test:dev:env": "npx cross-env URL=https://somedevelopmentenv.com playwright test"
   },
   "keywords": [],
-  "author": "RV",
+  "author": "Razvan Vancea",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
