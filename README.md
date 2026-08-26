@@ -1,4 +1,4 @@
-# 🎭 Mastering Playwright: Step-by-Step Guide to Building a Scalable Testing Framework with AI and Codegen
+# 🎭 Scratch to Smart: Building a Scalable Playwright Framework with AI Agents and MCP Server
 
 ## 📋 Overview
 
