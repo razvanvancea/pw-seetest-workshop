@@ -15,10 +15,5 @@ export class HeaderPage {
     this.signInButton = page.getByTestId('nav-sign-in');
     this.userMenuOptionsBtn = page.getByTestId('nav-menu');
     this.signOutButton = page.getByTestId('nav-sign-out');
-    // this.loginSection = page.locator('#loginSection');
-    // this.welcomeMessage = page.locator('text=Welcome back');
-    // this.signInButton = page.locator('[data-test="nav-sign-in"]');
-    // this.userMenuOptionsBtn = page.locator('[data-test="nav-menu"]');
-    // this.signOutButton = page.locator('[data-test="nav-sign-out"]');
   }
 }

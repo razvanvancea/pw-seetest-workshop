@@ -28,14 +28,12 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@faker-js/faker": "^10.4.0",
+    "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.62.1",
-    "@types/node": "^25.3.3",
+    "@types/node": "^26.3.0",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.2",
     "oxfmt": "^0.51.0",
-    "playwright-schema-validator": "^1.0.0",
-    "typescript-eslint": "^8.54.0",
-    "zod": "^4.4.3"
+    "typescript-eslint": "^8.54.0"
   }
 }

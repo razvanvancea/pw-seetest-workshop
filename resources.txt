@@ -1,8 +1,7 @@
 Your project is up to date - NO NEED to run the 'git pull' command :)
 
-workshop exercise solutions: https://tinyurl.com/expoqa-sol
+workshop exercise solutions: https://tinyurl.com/seetest-sol
 website demo app: https://practicesoftwaretesting.com
-api demo app: https://api.practicesoftwaretesting.com/api/documentation
 
 == Documentation ==
 Playwright docs: https://playwright.dev/docs/intro
