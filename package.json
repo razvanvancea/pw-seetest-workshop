@@ -6,9 +6,9 @@
   "scripts": {
     "test": "npx playwright test",
     "test:check": "npx playwright test tests/e2e/setup-check.spec.ts",
-    "test:fundamentals": "playwright test tests/01-playwright-fundamentals.spec.ts",
-    "test:codegen": "playwright test tests/02-account-creation-codegen.spec.ts",
-    "test:optional": "playwright test tests/03-optional-fundamentals.spec.ts",
+    "test:fundamentals": "playwright test tests/e2e/01-playwright-fundamentals.spec.ts",
+    "test:codegen": "playwright test tests/e2e/02-account-creation-codegen.spec.ts",
+    "test:optional": "playwright test tests/e2e/03-optional-fundamentals.spec.ts",
     "test:headless": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:single-worker": "npx playwright test --workers=1",
