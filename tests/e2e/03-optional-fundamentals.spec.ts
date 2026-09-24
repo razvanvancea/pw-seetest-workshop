@@ -16,8 +16,8 @@ test.describe('Optional fundamentals test suite', () => {
    * OPTIONAL Exercise 7: run only the test that tries to login with invalid credentials, 10 times in a row, from CLI
    * */
 
-  //   test('ex 4-7: the user should see an error message when trying to authenticate using invalid credentials', async ({
-  //     page,
-  //   }) => {
-  //   });
+  // test('ex 4-7: the user should see an error message when trying to authenticate using invalid credentials', async ({
+  //   page,loginPage,
+  // }) => {
+  // });
 });
