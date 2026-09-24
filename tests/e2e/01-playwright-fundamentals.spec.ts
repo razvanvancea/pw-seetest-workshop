@@ -14,17 +14,6 @@ test.describe('Fundamentals test suite', () => {
   //   });
 
   /**
-   * Exercise 2: recreate the logout scenario, using Page Object Model design pattern
-   */
-  // test('ex 2: the user should be able to logout - using POM design pattern', async ({
-  //   loginPage,
-  //   headerPage,
-  // }) => {
-  //   await loginPage.login('admin@practicesoftwaretesting.com', 'welcome01');
-
-  // });
-
-  /**
    * Quality checkpoint:
    *
    * Before moving forward, run from CLI:
