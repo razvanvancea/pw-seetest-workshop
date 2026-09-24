@@ -10,8 +10,6 @@ Trace viewer: https://trace.playwright.dev/
 
 Playwright MCP Server: https://github.com/microsoft/playwright-mcp
 
-awesome-copilot: https://github.com/github/awesome-copilot
-
 awesome-copilot (playwright-ts-custom-instructions): https://github.com/github/awesome-copilot/blob/main/instructions/playwright-typescript.instructions.md
 
 Playwright agents: https://playwright.dev/docs/test-agents
@@ -36,4 +34,4 @@ API: JSON to Zod converter - https://transform.tools/json-to-zod
 All the relevant PW CLI commands are stored in package.json file. You can invoke them using 'npm run' + script name (e.g. npm run test:headed)
 CLI command for generating project structure from a plain folder: npm init playwright@latest
 
-CLI command for starting the codegen, open the browser and automatically record tests based on your browser navigation: npx playwright codegen https://practicesoftwaretesting.com
+CLI command for starting the codegen, open the browser and automatically record tests based on your browser navigation: npx playwright codegen https://tai-shop.razvanvancea.ro
