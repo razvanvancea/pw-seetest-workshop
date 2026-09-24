@@ -5,7 +5,7 @@ test.describe('Setup check: User authentication test suite', () => {
     await page.goto('/');
   });
 
-  test('the user should be able to login as admin', async ({ loginPage }) => {
-    await loginPage.login('admin@practicesoftwaretesting.com', 'welcome01');
+  test('the user should be able to login', async ({ loginPage }) => {
+    await loginPage.login('admin@admin.com', 'admin123');
   });
 });

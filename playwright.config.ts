@@ -12,11 +12,11 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html'], ['list'], ['blob']],
   use: {
-    baseURL: `${process.env.BASE_URL || 'https://practicesoftwaretesting.com'}`,
+    baseURL: `${process.env.BASE_URL || 'https://tai-shop.razvanvancea.ro'}`,
     trace: 'retain-on-failure', // 'on-first-retry', 'on-all-retries', 'off', 'on' https://trace.playwright.dev
     video: 'off', // 'off' is the default, 'on', 'on-first-retry', 'retain-on-failure',
     screenshot: 'only-on-failure', // on, off,
-    testIdAttribute: 'data-test',
+    testIdAttribute: 'test-data',
   },
 
   /* Configure projects for major browsers */
