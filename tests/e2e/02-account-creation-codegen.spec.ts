@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test, expect } from '../../page-fixtures';
 import { faker } from '@faker-js/faker';
 
 test.describe('Account creation codegen test suite', () => {
