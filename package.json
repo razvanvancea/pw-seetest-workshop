@@ -20,7 +20,7 @@
     "format": "npx oxfmt",
     "format:check": "npx oxfmt --check",
     "lint": "tsc --noEmit && eslint tests/**",
-    "codegen": "npx playwright codegen https://practicesoftwaretesting.com",
+    "codegen": "npx playwright codegen https://tai-shop.razvanvancea.ro",
     "test:dev:env": "npx cross-env URL=https://somedevelopmentenv.com playwright test"
   },
   "keywords": [],
