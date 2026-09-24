@@ -14,6 +14,12 @@ test.describe('Fundamentals test suite', () => {
   //   });
 
   /**
+   * Exercise 2: use the codegen feature and record the test switching language to ES and verify that the language has been changed successfully
+   */
+  //   test('ex 2: the user should be able change the language to ES', async ({ page }) => {
+  //   });
+
+  /**
    * Quality checkpoint:
    *
    * Before moving forward, run from CLI:
