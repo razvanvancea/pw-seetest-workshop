@@ -1,19 +1,14 @@
----
-description: 'Playwright test generation and Page Object Model patterns for E2E tests'
-applyTo: '**'
----
-
 ## Playwright Testing Guidelines
 
 ### Code Quality Standards
 - **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. Use `test.step()` to group interactions and improve test readability and reporting.
-- **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Avoid `expect(locator).toBeVisible()` unless specifically testing for visibility changes.
+- **Assertions**: Use auto-retrying web-first assertions (e.g., `await expect(locator).toHaveText()`). Use `toBeVisible()` when visibility itself is part of the behavior being tested; otherwise, prefer an assertion that verifies the expected state or content.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
 
 
 ### Test Structure
-- **Imports**: Start with `import { test, expect } from '@playwright/test';`.
+- **Imports**: Import `test` and `expect` from `../../page-fixtures` in specs under `tests/e2e/` so tests can use the project's registered page-object fixtures.
 - **Organization**: Group related tests for a feature under a `test.describe()` block.
 - **Hooks**: Use `beforeEach` for setup actions common to all tests in a `describe` block (e.g., navigating to a page).
 - **Titles**: Follow a clear naming convention, such as `Feature - Specific action or scenario`.
@@ -25,7 +20,7 @@ applyTo: '**'
 - **Scope**: Aim for one test file per major application feature or page.
 
 ### Assertion Best Practices
-- **UI Structure**: Use `toMatchAriaSnapshot` to verify the accessibility tree structure of a component. This provides a comprehensive and accessible snapshot.
+- **UI Structure**: Use `toMatchAriaSnapshot` when the accessibility tree structure is what the test needs to verify. For focused behavior checks, prefer assertions on the relevant role, text, value, or URL.
 - **Element Counts**: Use `toHaveCount` to assert the number of elements found by a locator.
 - **Text Content**: Use `toHaveText` for exact text matches and `toContainText` for partial matches.
 - **Navigation**: Use `toHaveURL` to verify the page URL after an action.
@@ -34,7 +29,7 @@ applyTo: '**'
 ## Example Test Structure
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../page-fixtures';
 
 test.describe('Movie Search Feature', () => {
   test.beforeEach(async ({ page }) => {
@@ -103,10 +98,10 @@ Before finalizing tests, ensure:
   readonly loginButton: Locator;
   ```
 - **Locator Strategy**: Prioritize in order:
-  1. **Test IDs**: `page.getByTestId('email')`
-  2. **Roles**: `page.getByRole('button', { name: 'Login' })`
-  3. **Labels**: `page.getByLabel('Email')`
-  4. **Text**: `page.getByText('Sign In')`
+  1. **Roles**: `page.getByRole('button', { name: 'Login' })`
+  2. **Labels**: `page.getByLabel('Email')`
+  3. **Text**: `page.getByText('Sign In')`
+  4. **Test IDs**: `page.getByTestId('email')` when an accessible locator is unavailable or ambiguous
   5. **Avoid**: CSS selectors or XPath unless absolutely necessary
 
 ### Action Methods
@@ -129,9 +124,9 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByTestId('email');
-    this.passwordInput = page.getByTestId('password');
-    this.loginButton = page.getByTestId('login-submit');
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: 'Login' });
     this.loggedInUsername = page.getByTestId('nav-menu');
   }
 
@@ -163,7 +158,7 @@ export class LoginPage {
 ### Quality Checklist — Page Objects
 - [ ] Class name matches file name (LoginPage in login.page.ts)
 - [ ] All locators are readonly with explicit Locator type
-- [ ] Locators use test IDs or role-based strategies
+- [ ] Locators prefer accessible role, label, or text strategies, using test IDs when needed
 - [ ] Action methods are async and encapsulate complete user flows
 - [ ] Registered as fixtures in `page-fixtures.ts`
 - [ ] No hardcoded waits or timeouts
