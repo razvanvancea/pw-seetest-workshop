@@ -1,7 +1,7 @@
 ## Playwright Testing Guidelines
 
 ### Code Quality Standards
-- **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. Use `test.step()` to group interactions and improve test readability and reporting.
+- **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility.
 - **Assertions**: Use auto-retrying web-first assertions (e.g., `await expect(locator).toHaveText()`). Use `toBeVisible()` when visibility itself is part of the behavior being tested; otherwise, prefer an assertion that verifies the expected state or content.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
