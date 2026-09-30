@@ -4,7 +4,7 @@
 - **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility.
 - **Assertions**: Use auto-retrying web-first assertions (e.g., `await expect(locator).toHaveText()`). Use `toBeVisible()` when visibility itself is part of the behavior being tested; otherwise, prefer an assertion that verifies the expected state or content.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
-- **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
+- **Clarity**: Use descriptive test titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
 
 
 ### Test Structure
@@ -31,41 +31,21 @@
 ```typescript
 import { test, expect } from '../../page-fixtures';
 
-test.describe('Movie Search Feature', () => {
+test.describe('User authentication test suite', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the application before each test
-    await page.goto('https://debs-obrien.github.io/playwright-movies-app');
+    await page.goto('/');
   });
 
-  test('Search for a movie by title', async ({ page }) => {
-    await test.step('Activate and perform search', async () => {
-      await page.getByRole('search').click();
-      const searchInput = page.getByRole('textbox', { name: 'Search Input' });
-      await searchInput.fill('Garfield');
-      await searchInput.press('Enter');
-    });
-
-    await test.step('Verify search results', async () => {
-      // Verify the accessibility tree of the search results
-      await expect(page.getByRole('main')).toMatchAriaSnapshot(`
-        - main:
-          - heading "Garfield" [level=1]
-          - heading "search results" [level=2]
-          - list "movies":
-            - listitem "movie":
-              - link "poster of The Garfield Movie The Garfield Movie rating":
-                - /url: /playwright-movies-app/movie?id=tt5779228&page=1
-                - img "poster of The Garfield Movie"
-                - heading "The Garfield Movie" [level=2]
-      `);
-    });
+  test('the user should be able to login', async ({ loginPage, headerPage }) => {
+    await loginPage.login('admin@admin.com', 'admin123');
+    await expect(headerPage.logoutBtn).toBeVisible();
   });
 });
 ```
 
 ## Test Execution Strategy
 
-1. **Initial Run**: Execute tests with `npx playwright test --project=chromium`
+1. **Initial Run**: Execute tests with `npx playwright test`
 2. **Debug Failures**: Analyze test failures and identify root causes
 3. **Iterate**: Refine locators, assertions, or test logic as needed
 4. **Validate**: Ensure tests pass consistently and cover the intended functionality
