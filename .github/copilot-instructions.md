@@ -1,12 +1,12 @@
 ---
-description: 'Playwright test generation instructions'
+description: 'Playwright test generation and Page Object Model patterns for E2E tests'
 applyTo: '**'
 ---
 
-## Test Writing Guidelines
+## Playwright Testing Guidelines
 
 ### Code Quality Standards
-- **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility.
+- **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. Use `test.step()` to group interactions and improve test readability and reporting.
 - **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Avoid `expect(locator).toBeVisible()` unless specifically testing for visibility changes.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
@@ -43,13 +43,15 @@ test.describe('Movie Search Feature', () => {
   });
 
   test('Search for a movie by title', async ({ page }) => {
- 
+    await test.step('Activate and perform search', async () => {
       await page.getByRole('search').click();
       const searchInput = page.getByRole('textbox', { name: 'Search Input' });
       await searchInput.fill('Garfield');
       await searchInput.press('Enter');
-  
+    });
 
+    await test.step('Verify search results', async () => {
+      // Verify the accessibility tree of the search results
       await expect(page.getByRole('main')).toMatchAriaSnapshot(`
         - main:
           - heading "Garfield" [level=1]
@@ -61,20 +63,20 @@ test.describe('Movie Search Feature', () => {
                 - img "poster of The Garfield Movie"
                 - heading "The Garfield Movie" [level=2]
       `);
-    
+    });
   });
 });
 ```
 
 ## Test Execution Strategy
 
-1. **Initial Run**: Execute tests with `npx playwright test`
+1. **Initial Run**: Execute tests with `npx playwright test --project=chromium`
 2. **Debug Failures**: Analyze test failures and identify root causes
 3. **Iterate**: Refine locators, assertions, or test logic as needed
 4. **Validate**: Ensure tests pass consistently and cover the intended functionality
 5. **Report**: Provide feedback on test results and any issues discovered
 
-## Quality Checklist
+## Quality Checklist — E2E Tests
 
 Before finalizing tests, ensure:
 - [ ] All locators are accessible and specific and avoid strict mode violations
@@ -82,3 +84,86 @@ Before finalizing tests, ensure:
 - [ ] Assertions are meaningful and reflect user expectations
 - [ ] Tests follow consistent naming conventions
 - [ ] Code is properly formatted and commented
+
+
+---
+
+## Page Object Model (POM) Guidelines
+
+### Structure & Naming
+- **Location**: Store all page objects in the `pages/` directory with naming convention `<feature>.page.ts` (e.g., `login.page.ts`, `header.page.ts`).
+- **Class Pattern**: Export a class named `<Feature>Page` (e.g., `LoginPage`, `HeaderPage`).
+- **Constructor**: Accept `page: Page` as the only parameter and assign it as `this.page`.
+
+### Locator Declarations
+- **Typed Properties**: Declare all locators as `readonly` properties with explicit type annotations:
+  ```typescript
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  ```
+- **Locator Strategy**: Prioritize in order:
+  1. **Test IDs**: `page.getByTestId('email')`
+  2. **Roles**: `page.getByRole('button', { name: 'Login' })`
+  3. **Labels**: `page.getByLabel('Email')`
+  4. **Text**: `page.getByText('Sign In')`
+  5. **Avoid**: CSS selectors or XPath unless absolutely necessary
+
+### Action Methods
+- **Method Purpose**: Encapsulate user interactions and assertions that are specific to a page feature.
+- **Naming**: Use verb-first naming (e.g., `login()`, `fillEmail()`, `submitForm()`).
+- **Async Pattern**: All methods must be `async`.
+- **Return Values**: Return `void` unless the method chains to another page object.
+- **Assertions**: Include minimal assertions to verify actions completed (e.g., asserting successful login state).
+
+### Example POM Structure
+```typescript
+import { expect, type Locator, type Page } from '@playwright/test';
+
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly loggedInUsername: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.getByTestId('email');
+    this.passwordInput = page.getByTestId('password');
+    this.loginButton = page.getByTestId('login-submit');
+    this.loggedInUsername = page.getByTestId('nav-menu');
+  }
+
+  async login(email: string, password: string, expectedUsername: string = 'John Doe') {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+    await expect(this.loggedInUsername).toContainText(expectedUsername);
+  }
+}
+```
+
+### Fixture Registration
+- **Location**: Register page objects as fixtures in `page-fixtures.ts`.
+- **Pattern**: Extend Playwright's `test` with a custom interface and provide setup logic:
+  ```typescript
+  interface PageFixtures {
+    loginPage: LoginPage;
+  }
+  
+  export const test = base.extend<PageFixtures>({
+    loginPage: async ({ page }, use) => {
+      const loginPage = new LoginPage(page);
+      await use(loginPage);
+    },
+  });
+  ```
+
+### Quality Checklist — Page Objects
+- [ ] Class name matches file name (LoginPage in login.page.ts)
+- [ ] All locators are readonly with explicit Locator type
+- [ ] Locators use test IDs or role-based strategies
+- [ ] Action methods are async and encapsulate complete user flows
+- [ ] Registered as fixtures in `page-fixtures.ts`
+- [ ] No hardcoded waits or timeouts
