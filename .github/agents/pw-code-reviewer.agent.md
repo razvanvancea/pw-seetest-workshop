@@ -77,7 +77,6 @@ Beyond the project's [custom instructions](../copilot-instructions.md), enforce 
 - Ensure navigation-triggering actions are awaited correctly (e.g., click + navigation expectations).
 
 ### Steps & titles
-- Use `test.step()` to group interactions into clear phases with descriptive titles.
 - Titles should state intent (what/why), not mechanics (how).
 - Prefer descriptive test titles following: `Feature - Scenario`.
 
