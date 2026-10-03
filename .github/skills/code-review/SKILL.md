@@ -1,110 +1,128 @@
 ---
 name: code-review
-description: PR-style review of the current branch compared to origin/main using the repository Playwright + TypeScript code reviewer. Use when the user asks for code review, PR review, branch review, Playwright review, or review current branch versus main.
-argument-hint: "Optional: focus=<area> severity=<only blockers|full> Example: focus=auth severity=full"
+description: PR-style code review of the current branch compared to origin/main using the repository Playwright + TypeScript code review specialist. Use when the user asks for code review, PR review, branch review, Playwright review, or review current branch versus main.
+argument-hint: "Optional: focus=<area> severity=<full|only-blockers> Example: focus=auth severity=full"
 disable-model-invocation: true
 ---
 
-# Code Review Current Branch vs Main
+# Code Review
 
-Perform a pull-request style code review of the current branch compared to `origin/main`.
+Run a pull-request style review of the current branch compared to `origin/main`.
 
-This skill is a slash-command entry point for the repository reviewer workflow.
-
-Use the repository custom agent:
+The repository specialist agent is the single source of truth for the review:
 
 ```txt
 .github/agents/pw-code-reviewer.agent.md
 ```
 
-Specifically, follow the `pw-code-reviewer-specialist` agent instructions for:
+Invoke the `pw-code-reviewer-specialist` agent and let it perform the review according to its own instructions.
 
+## Source of Truth
+The specialist agent defines and owns:
 - review scope
-- Playwright and TypeScript quality bar
+- Git diff collection
+- branch comparison rules
+- Playwright review criteria
+- TypeScript review criteria
 - project conventions
+- reliability and flake-prevention rules
+- locator standards
+- test isolation requirements
+- diagnostics requirements
 - severity definitions
+- finding quality
 - output format
+- architecture assessment
+- risk assessment
 - non-goals
-- tone
+- reviewer tone
 
-Also follow:
+Do not duplicate, reinterpret, or override these rules in this skill.
+
+The agent's existing behavior and criteria are authoritative.
+
+Also follow the repository instructions:
 
 ```txt
 .github/copilot-instructions.md
 ```
 
-Project instructions take precedence over generic best practices.
+Project-specific instructions referenced by the specialist agent take precedence over generic best practices.
 
-## Optional inputs
+## Optional Arguments
+The user may optionally provide review parameters.
+### Focus
+Example:
 
-The user may provide optional arguments after `/code-review`, for example:
+/code-review focus=auth
+/code-review focus=selectors
+/code-review focus=fixtures
+/code-review focus=flake-risk
 
-```txt
-/code-review focus=auth severity=full
-/code-review focus=selectors severity=only blockers
-```
+focus is an additional review emphasis.
 
-Interpret:
+It does not change the review scope defined by the specialist agent.
 
-- `focus`: optional review focus area, such as auth, selectors, fixtures, CI stability, page objects, test data, assertions, or flake risk.
-- `severity`: either `full` or `only blockers`.
+The specialist must still review only the current branch changes compared to origin/main.
 
-Defaults:
+If no focus is provided, perform the normal full review defined by the specialist agent.
 
-- `focus`: review all changed areas.
-- `severity`: `full`.
+### Severity
+Supported values:
 
-If `severity=only blockers`, report only must-fix findings, but still include the diff summary, architecture notes, and risk assessment.
+full
+only-blockers
 
-## Prime directive
+Examples:
 
-Review ONLY changes introduced on the current branch compared to `origin/main`.
+/code-review severity=full
+/code-review severity=only-blockers
 
-Do NOT review unrelated files, historical code, or untouched areas.
+Default:
 
-Do NOT edit files unless the user explicitly asks for fixes to be applied.
+severity=full
 
-## First action
+When severity=only-blockers is provided, instruct the specialist to report only findings classified as BLOCKER.
 
-When terminal or shell execution is available, collect the diff yourself:
+The specialist's definitions of BLOCKER, MAJOR, and MINOR remain authoritative.
 
-```bash
-git rev-parse --abbrev-ref HEAD
-git status -sb
-git fetch origin main
-git diff --name-only origin/main...HEAD
-git diff --unified=5 origin/main...HEAD
-```
+Do not redefine severity criteria in this skill.
 
-Review only files returned by:
+## Execution Rules
+1. Invoke pw-code-reviewer-specialist.
+2. Pass the user's optional focus and severity values as review context.
+3. Do not perform an independent review in parallel with the specialist.
+4. Do not duplicate the specialist's review checklist.
+5. Do not add additional review criteria unless the user explicitly asks for them.
+6. Do not modify files during the review.
+7. If the user later explicitly asks to apply fixes, that is a separate action and must follow the specialist's rules for editing.
 
-```bash
-git diff --name-only origin/main...HEAD
-```
+## Scope
+The review scope is entirely controlled by the specialist agent.
 
-If terminal access is unavailable or fails:
+The skill must not expand the review to:
 
-1. Check whether Git diff context was attached by the user.
-2. If no diff is available, ask the user to provide:
+- unrelated files
+- historical code
+- untouched code
+- the entire repository
+- unrelated project architecture
 
-```bash
-git diff --unified=5 origin/main...HEAD
-```
-
-3. Do nothing else until the diff is available.
+The specialist may inspect additional context only according to its own scope rules.
 
 ## Output
+Return the specialist agent's review.
 
-Use the output format defined in:
+Do not rewrite, summarize, or reinterpret the specialist's findings unless the user explicitly asks for a summary.
 
-```txt
-.github/agents/pw-code-reviewer.agent.md
-```
+Preserve the specialist's:
 
-If `severity=only blockers`, omit non-blocker findings.
+- findings
+- severity
+- rationale
+- suggested fixes
+- architecture notes
+- risk assessment
+- tone
 
-## Non-goals
-
-- Do not duplicate the full reviewer rubric here.
-- Do not redefine project coding standards here.
-- Do not override the specialist agent unless explicitly instructed by the user.
+When severity=only-blockers is requested, return the specialist's blocker-only review.
