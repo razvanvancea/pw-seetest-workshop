@@ -1,4 +1,4 @@
-import { test, expect } from '../../page-fixtures';
+import { test } from '../../page-fixtures';
 import { faker } from '@faker-js/faker';
 
 test.describe('Account creation codegen test suite', () => {
@@ -12,7 +12,16 @@ test.describe('Account creation codegen test suite', () => {
    * Exercise 3C: use faker library to generate random unique email address for each test run
    * 3C Note: feel free to use the randomEmail constant to fill the email address. It creates a random email address using the faker library and can be used to ensure that each test run uses a unique email address
    */
-  //   test('ex 3: the user should be able to create a new account', async ({ page }) => {
-  //     const randomEmail = faker.internet.email();
-  //   });
+  test('ex 3: the user should be able to create a new account', async ({ accountPage }) => {
+    const randomEmail = faker.internet.email();
+
+    await accountPage.createAccount({
+      firstName: 'john',
+      lastName: 'doe',
+      phoneNumber: '0777777777',
+      country: 'Romania',
+      email: randomEmail,
+      password: 'Superpass.123',
+    });
+  });
 });

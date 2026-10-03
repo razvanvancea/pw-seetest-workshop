@@ -1,4 +1,4 @@
-import { type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class HeaderPage {
   readonly page: Page;
@@ -7,5 +7,10 @@ export class HeaderPage {
   constructor(page: Page) {
     this.page = page;
     this.logoutBtn = page.getByRole('link', { name: 'Log Out' });
+  }
+
+  async logout() {
+    await this.logoutBtn.click();
+    await expect(this.logoutBtn).not.toBeVisible();
   }
 }
