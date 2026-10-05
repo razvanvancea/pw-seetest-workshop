@@ -35,3 +35,10 @@ All the relevant PW CLI commands are stored in package.json file. You can invoke
 CLI command for generating project structure from a plain folder: npm init playwright@latest
 
 CLI command for starting the codegen, open the browser and automatically record tests based on your browser navigation: npx playwright codegen https://tai-shop.razvanvancea.ro
+
+
+=== prompts ===
+1. Refactor all the existing tests to follow the established POM pattern, reusing the existing page fixtures and all conventions defined in `copilot-instructions.md`
+2. Create a concise Playwright test plan for "https://tai-shop.razvanvancea.ro". Explore only enough to identify the 3 most important user flows, prioritize them using the `risk-based-prioritization` skill, and save a lightweight Markdown test plan. 
+3. Implement the "Validate shipping details and place a sandbox order" from the generated `test-plan.md` as a single playwright test in 'place-order.spec.ts', following copilot-instructions.md and reusing the existing POMs and page fixtures.
+4. /code-review for working tree in `place-order.spec.ts` file
